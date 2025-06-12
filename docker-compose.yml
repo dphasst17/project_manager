@@ -1,0 +1,145 @@
+services:
+  db:
+    image: mysql:8.0
+    command: --sql_mode=STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION --max_allowed_packet=1073741824 --group_concat_max_len=1000000
+    volumes:
+      - db_data:/var/lib/mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: ${DB_NAME}
+    ports:
+      - '${PORT_SQL}:3306'
+
+  phpmyadmin:
+    depends_on:
+      - db
+    image: phpmyadmin/phpmyadmin
+    restart: always
+    ports:
+      - '8080:80'
+    environment:
+      PMA_HOST: db
+      PMA_USER: ${DB_USER}
+      PMA_PASSWORD: ${DB_PASSWORD}
+
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    command: tunnel --config /etc/cloudflared/config.yml run
+    volumes:
+      - /home/fast/.cloudflared:/etc/cloudflared
+    networks:
+      - api-network
+
+  api:
+    build:
+      context: ./s/api
+      dockerfile: Dockerfile
+    restart: always
+    mem_limit: 512m
+    mem_reservation: 256m
+    ports:
+      - '3001:3001'
+    volumes:
+      - ./s/api:/app
+      - ./utils:/app/utils
+    environment:
+      - PORT=3001
+    command: npm run start:dev
+    env_file:
+      - .env
+    networks:
+      - api-network
+  auth:
+    restart: always
+    mem_limit: 512m
+    mem_reservation: 256m
+    depends_on:
+      - db
+    build:
+      context: ./s/auth
+      dockerfile: Dockerfile
+    volumes:
+      - ./s/auth:/app
+      - ./utils:/app/utils
+    command: npm run start:dev
+    env_file:
+      - .env
+
+  employees:
+    restart: always
+    mem_limit: 512m
+    mem_reservation: 256m
+    depends_on:
+      - db
+    build:
+      context: ./s/employees
+      dockerfile: Dockerfile
+    volumes:
+      - ./s/employees:/app
+      - ./utils:/app/utils
+    command: npm run start:dev
+    env_file:
+      - .env
+
+  project:
+    restart: always
+    mem_limit: 512m
+    mem_reservation: 256m
+    depends_on:
+      - db
+    build:
+      context: ./s/project
+      dockerfile: Dockerfile
+    volumes:
+      - ./s/project:/app
+      - ./utils:/app/utils
+    command: npm run start:dev
+    env_file:
+      - .env
+
+  file:
+    restart: always
+    mem_limit: 512m
+    mem_reservation: 256m
+    build:
+      context: ./s/file
+      dockerfile: Dockerfile
+    volumes:
+      - ./s/file:/app
+    command: npm run start:dev
+    env_file:
+      - .env
+
+  redis:
+    restart: always
+    mem_limit: 512m
+    mem_reservation: 256m
+    build:
+      context: ./s/redis
+      dockerfile: Dockerfile
+    volumes:
+      - ./s/redis:/app
+    command: npm run start:dev
+    env_file:
+      - .env
+
+  redis_service:
+    image: 'redis:alpine'
+    container_name: nest-redis
+    volumes:
+      - ./redis.conf:/etc/redis/redis.conf
+    ports:
+      - "6379:6379"
+    command: ["redis-server", "/etc/redis/redis.conf"]
+  nats:
+    image: nats
+    ports:
+      - "4222:4222"
+volumes:
+  db_data: {}
+
+networks:
+  api-network:
+    driver: bridge
+
