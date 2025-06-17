@@ -7,6 +7,9 @@ name: Deploy Application
 jobs:
   setup:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./c
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -41,6 +44,9 @@ jobs:
   deploy:
     needs: setup
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./c
     steps:
       - name: Download artifact
         uses: actions/download-artifact@v4
@@ -51,3 +57,4 @@ jobs:
         env:
           FIREBASE_TOKEN: ${{ secrets.FT }}
         run: firebase deploy
+
