@@ -36,10 +36,18 @@ jobs:
           echo "NEXT_PUBLIC_FIREBASE_APP_ID=${{ secrets.FAI }}" >> .env
           echo "NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID=${{ secrets.FMI }}" >> .env
           cat .env
+
+      - name: Set up Google Credentials
+        run: echo '${{ secrets.GAC }}' > /tmp/google-credentials.json
+      
+      - name: Verify Google Credentials
+        run: cat /tmp/google-credentials.json || echo "Missing credentials!"
+
       - name: Enable Firebase Web Frameworks Experiment
         run: firebase experiments:enable webframeworks
+
       - name: Deploy to Firebase
         env:
-          FIREBASE_TOKEN: ${{ secrets.FT }}
+          GOOGLE_APPLICATION_CREDENTIALS: /tmp/google-credentials.json
         run: firebase deploy
 
