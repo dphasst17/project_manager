@@ -9,7 +9,7 @@ import {useRouter} from "next/navigation";
 const Project = () => {
   const { project,employeeProject } = useProjectStore()
   const { employee } = useEmployeeStore()
-  const { isAdmin, isManager } = use(AppContext)
+  const { isAdmin, isManager,setProjectId } = use(AppContext)
   const [data,setData] = useState([])
   const [page,setPage] = useState<{list:number[] | [],current:number}>({
   list:[],
@@ -52,7 +52,7 @@ const Project = () => {
               <TableCell>{item.end_date.split('T')[0].split('-').reverse().join('/')}</TableCell>
               <TableCell className="flex justify-around">
                 {(isAdmin || isManager) && 
-                  <ScanEye onClick={() => router.push(`/project/${item.project_id}`)} className="cursor-pointer" />
+                  <ScanEye onClick={() => {setProjectId(item.project_id);router.push(`/project`)}} className="cursor-pointer" />
                 }
                 {isAdmin && <EllipsisVertical className="cursor-pointer" />}
               </TableCell>

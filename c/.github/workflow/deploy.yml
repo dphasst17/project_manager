@@ -1,0 +1,53 @@
+name: Deploy Application
+  on:
+    push:
+      branches:
+        - main
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+      - name: Install dependencies
+        run: npm install
+      - name: Install Firebase CLI
+        run: npm install -g firebase-tools
+      - name: Create Dot ENV
+        run: | 
+          touch .env
+          echo "NEXT_PUBLIC_URL_SERVER=${{ secrets.URL }}" >> .env
+          echo "NEXT_PUBLIC_IS_ADMIN=${{ secrets.ADMIN }}" >> .env
+          echo "NEXT_PUBLIC_IS_MANAGER=${{ secrets.MANAGER }}" >> .env
+          echo "NEXT_PUBLIC_FIREBASE_API_KEY=${{ secrets.FAK }}" >> .env
+          echo "NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=${{ secrets.FAD }}" >> .env
+          echo "NEXT_PUBLIC_FIREBASE_PROJECT_ID=${{ secrets.FPI }}" >> .env
+          echo "NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=${{ secrets.FSB }}" >> .env
+          echo "NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=${{ secrets.FMSI }}" >> .env
+          echo "NEXT_PUBLIC_FIREBASE_APP_ID=${{ secrets.FAI }}" >> .env
+          echo "NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID=${{ secrets.FMI }}" >> .env
+          cat .env
+      - name: Upload to artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: setup_project
+          path: setup
+
+  deploy:
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: setup_project
+          path: setup
+      - name: Deploy to Firebase
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FT }}
+        run: firebase deploy

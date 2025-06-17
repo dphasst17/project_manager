@@ -10,7 +10,7 @@ const CardMac = ({title,description,tag}:{title:string,description:string,tag:st
     {description}    
   </p>*/}
   <div className="tags">
-    {tag.map((t:string) => <span key={t} className="card-tag mr-1">{t}</span>)}
+    {tag.map((t:string) => <span key={`tag-${t}`} className="card-tag mr-1">{t}</span>)}
   </div>
   <div className="code-editor">
     <pre>

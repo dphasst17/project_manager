@@ -4,26 +4,30 @@ import Tasks from "@/components/pages/dashboard/task";
 import AdminEmployee from "@/components/pages/dashboard/employee";
 import Project from "@/components/pages/dashboard/project";
 import {AppContext} from "@/contexts/app";
-import { use, useState} from "react";
+import { use, useEffect, useState} from "react";
 import ProjectDialog from "@/components/pages/dashboard/dialog/project";
 import EmployeeDialog from "@/components/pages/dashboard/dialog/employee";
 import Statistical from "@/components/pages/dashboard/statistical";
 import TeamDialog from "@/components/pages/dashboard/dialog/team";
 import Team from "@/components/pages/dashboard/team";
 import BtnDialog from "@/components/btn_dialog";
+
+import { analytics } from "@/lib/firebase";
+
 export default function Home() {
-  const {isAdmin} = use(AppContext)
+  const {isAdmin,isLog} = use(AppContext)
   const [isDialog, setIsDialog] = useState<{project?:boolean,employee?:boolean,budget?:boolean,team?:boolean}>({
     project:false,
     employee:false,
     budget:false,
     team:false
   })
-    //next day, i will to add set data project when admin append data success and , add data user with role manager 
-    //The manager in project will to review task and update task from review status to completed status 
-    //Finally, i will to create contact page and push code to github, change ts config to fix error build client
-  return (
-  <div className="container mx-auto p-8 pt-24">
+  useEffect(() => {
+    if (analytics) {
+      console.log("Firebase Analytics ready");
+    }
+  }, []);
+  return isLog && <div className="container mx-auto p-8 pt-24">
       <div className="mb-10 flex flex-wrap justify-start">
         {isAdmin && <>
           <Statistical />
@@ -64,5 +68,5 @@ export default function Home() {
         <AdminEmployee />
       </div>
   </div>
-  );
+  ;
 }

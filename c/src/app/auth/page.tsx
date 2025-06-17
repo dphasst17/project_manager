@@ -56,6 +56,7 @@ const AuthPage = () => {
         <Input 
           {...register('password',{required:true})} 
           className={`border border-input mb-1 ${formState.errors.password && 'border-red-500'}`}
+          type="password"
           placeholder='Password'/>
         {formState.errors.password && <span className='rounded-md bg-red-500 text-[13px] text-white p-1'>Password is required</span>}
       </div>

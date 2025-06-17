@@ -7,6 +7,7 @@ import { ApiProvider } from "@/contexts/api";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import LayoutNavbar from "@/components/ui/layout-navbar";
+import AuthMiddleware from "./authMiddle";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -36,8 +37,8 @@ export default function RootLayout({
         <Providers>
           <AppProvider>
             <ApiProvider>
-                <LayoutNavbar >
-                  {children}
+                <LayoutNavbar>
+                  <AuthMiddleware>{children}</AuthMiddleware>
                 </LayoutNavbar>
             </ApiProvider>
           </AppProvider>

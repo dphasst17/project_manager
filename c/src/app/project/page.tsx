@@ -1,5 +1,4 @@
 'use client'
-import { useParams } from "next/navigation"
 import { useQuery } from "@tanstack/react-query"
 import { getProjectDetail } from "@/api/project"
 import { useEffect, useState,use } from "react"
@@ -14,12 +13,11 @@ import {AppContext} from "@/contexts/app"
 import BudgetOverview from "@/components/pages/project/overview/budget"
 import TaskOverview from "@/components/pages/project/overview/task"
 const ProjectDetail = () => {
-  const param = useParams()
-  const {isAdmin} = use(AppContext)
+  const {isAdmin,projectId} = use(AppContext)
   const {data,isLoading} = useQuery({
-    queryKey: ['project-detail', param.id],
-    queryFn: () => getProjectDetail(Number(param.id)),
-    enabled: !!param.id,
+    queryKey: ['project-detail', projectId],
+    queryFn: () => getProjectDetail(Number(projectId)),
+    enabled: !!projectId,
   })
   const [projectData,setProjectData] = useState<any>(null)
   const [isOpen,setIsOpen] = useState<{budget?:boolean,task?:boolean,member?:boolean}>({
@@ -47,7 +45,7 @@ const ProjectDetail = () => {
   const caculateProgress = (taskComplete: number, taskTotal: number) => {
     return (taskComplete / taskTotal) * 100
   }
-  return !isLoading && <div className="w-full h-auto flex flex-col items-center pt-10">
+  return !isLoading && projectId !== 0 && <div className="w-full h-auto flex flex-col items-center pt-10">
     {/*Project info*/}
     <div className="lg:w-3/4 xl:w-2/4 h-[100px]">
        {projectData && <div className="w-full h-[100px] grid grid-cols-8 gap-2">
@@ -80,7 +78,7 @@ const ProjectDetail = () => {
             {isAdmin && projectData && <BtnDialog title="+ Add Member" isOpen={isOpen.member as boolean} 
               openChange={() => setIsOpen({...isOpen,member:!isOpen.member})}
               btnClass="text-blue-500 cursor-pointer" Component={MemberDialog} 
-              props={{id:param.id,memberInProject:projectData.member.flatMap((m:any) => m.employee_id)}}/>}
+              props={{id:projectId,memberInProject:projectData.member.flatMap((m:any) => m.employee_id)}}/>}
           </div>
         </div>
         <div className="grid grid-cols-6 gap-2 overflow-y-auto">
@@ -91,12 +89,13 @@ const ProjectDetail = () => {
       </div>
 
       {/*Budget overview*/}
-      <BudgetOverview id={param.id} projectData={projectData} setProjectData={setProjectData} isOpen={isOpen} setIsOpen={setIsOpen}/>
+      <BudgetOverview id={projectId} projectData={projectData} setProjectData={setProjectData} isOpen={isOpen} setIsOpen={setIsOpen}/>
 
       {/*Task overview*/}
-      <TaskOverview id={param.id} projectData={projectData} setProjectData={setProjectData} isOpen={isOpen} setIsOpen={setIsOpen}/>
+      <TaskOverview id={projectId} projectData={projectData} setProjectData={setProjectData} isOpen={isOpen} setIsOpen={setIsOpen}/>
 
     </div>
   </div>
 }
 export default ProjectDetail
+
