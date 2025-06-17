@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  setup:
+  setup_deploy:
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -36,24 +36,7 @@ jobs:
           echo "NEXT_PUBLIC_FIREBASE_APP_ID=${{ secrets.FAI }}" >> .env
           echo "NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID=${{ secrets.FMI }}" >> .env
           cat .env
-      - name: Upload to artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: setup_project
-          path: setup
 
-  deploy:
-    needs: setup
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./c
-    steps:
-      - name: Download artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: setup_project
-          path: setup
       - name: Deploy to Firebase
         env:
           FIREBASE_TOKEN: ${{ secrets.FT }}
