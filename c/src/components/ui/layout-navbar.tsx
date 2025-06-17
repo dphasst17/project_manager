@@ -34,6 +34,12 @@ const LayoutNavbar = ({ children }: { children: React.ReactNode }) => {
       link: "/task",
     });
   }
+  if(!isAdmin){
+    navItems.splice(1, 0, {
+      name: "Chat",
+      link: "/chat",
+    });
+  }
   const router = useRouter()
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const {isPending} = use(ApiContext)

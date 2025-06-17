@@ -13,7 +13,8 @@ import {AppContext} from "@/contexts/app"
 import BudgetOverview from "@/components/pages/project/overview/budget"
 import TaskOverview from "@/components/pages/project/overview/task"
 const ProjectDetail = () => {
-  const {isAdmin,projectId} = use(AppContext)
+  const {isAdmin} = use(AppContext)
+  const [projectId,setProjectId] = useState(localStorage.getItem('projectId'))
   const {data,isLoading} = useQuery({
     queryKey: ['project-detail', projectId],
     queryFn: () => getProjectDetail(Number(projectId)),
@@ -41,11 +42,11 @@ const ProjectDetail = () => {
         progressBudget:Math.floor(progressBudget)
       })
     }
-  },[data])
+  },[data,projectId])
   const caculateProgress = (taskComplete: number, taskTotal: number) => {
     return (taskComplete / taskTotal) * 100
   }
-  return !isLoading && projectId !== 0 && <div className="w-full h-auto flex flex-col items-center pt-10">
+  return !isLoading && projectId &&Number(projectId) !== 0 && <div className="w-full h-auto flex flex-col items-center pt-10">
     {/*Project info*/}
     <div className="lg:w-3/4 xl:w-2/4 h-[100px]">
        {projectData && <div className="w-full h-[100px] grid grid-cols-8 gap-2">

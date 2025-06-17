@@ -26,13 +26,14 @@ Before you begin, ensure you have the following installed:
 
 ## Features of the project
 
-- Authentication
-- Authorization
-- File upload
-- Project management
-- Employee management
-- Task management
-- Admin management
+- ✅ Authentication
+- ✅ Authorization
+- ✅ Project management
+- ✅ Employee management
+- ✅ Task management
+- ✅ Admin management
+- 🚧 Chat(work in progress)
+- 🚧 File uploading(work in progress)
 
 ## Services Overview
 

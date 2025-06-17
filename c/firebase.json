@@ -6,12 +6,6 @@
       "**/.*",
       "**/node_modules/**"
     ],
-    "rewrites": [
-      {
-        "source": "/project/**",
-        "destination": "/index.html"
-      }
-    ],
     "frameworksBackend": {
       "region": "asia-east1"
     }
