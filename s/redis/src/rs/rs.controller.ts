@@ -16,7 +16,6 @@ export class RsController {
     }
     @EventPattern('redis_set')
     async redisSet(data: {key: string, value: any}[]) {
-        console.log(data)
         const convertData = data.map(d => ({ key: d.key, value: JSON.stringify(d.value) }))
         return await this.redisService.redisSet(convertData)
     }

@@ -7,7 +7,10 @@ import {ValueType} from 'utils/query_custom';
 @Controller('')
 export class RsController {
     constructor(private readonly rsService: RsService) { }
-
+    @EventPattern('info')
+    async getEmployeeInfo(id: number) {
+        return this.rsService.getEmployeeInfo(id)
+    }
     @EventPattern('getEmployees')
     async getEmployees(data:{page: number, limit: number}) {
         const {page,limit} = data

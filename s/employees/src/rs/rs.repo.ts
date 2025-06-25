@@ -9,6 +9,13 @@ import { ValueType,updateDataByCondition } from 'utils/query_custom';
 @Injectable()
 export class RsRepo {
     constructor(@InjectKysely() private readonly db: Kysely<DB>) { }
+    async getEmployeeInfo(id: number) {
+      const data = await this.db.selectFrom('employees')
+      .select(['first_name','last_name','email'])
+      .where('employee_id','=', id)
+      .execute()
+      return data
+    }
     async getEmployees(page: number, limit: number) {
         const data = await this.db.selectFrom('employees')
         .select<any>((eb:any) => [

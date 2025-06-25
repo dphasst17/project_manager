@@ -24,6 +24,10 @@ const LayoutNavbar = ({ children }: { children: React.ReactNode }) => {
       link: "/",
     },
     {
+      name: "Chat",
+      link: "/chat",
+    },
+    {
       name: "Contact",
       link: "/",
     }
@@ -32,12 +36,6 @@ const LayoutNavbar = ({ children }: { children: React.ReactNode }) => {
     navItems.splice(1, 0, {
       name: "Task",
       link: "/task",
-    });
-  }
-  if(!isAdmin){
-    navItems.splice(1, 0, {
-      name: "Chat",
-      link: "/chat",
     });
   }
   const router = useRouter()
@@ -62,10 +60,8 @@ const LayoutNavbar = ({ children }: { children: React.ReactNode }) => {
   }
   useEffect(() => {
     if(windowWidth >= 1424){
-      console.log("t")
       setIsMobileMenuOpen(false)
     }else{
-      console.log("f")
       setIsMobileMenuOpen(true)
     }
   },[])

@@ -18,7 +18,23 @@
     --foreground: #ededed;
   }
 }
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
 
+::-webkit-scrollbar-track {
+  background: black;
+}
+
+::-webkit-scrollbar-thumb {
+  background: white;
+  border-radius: 8px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
 body {
   background: #0a0a0a;
   color: var(--foreground);

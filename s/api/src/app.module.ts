@@ -8,15 +8,18 @@ import { AppService } from './app.service';
 import { Middleware } from './middleware/middle';
 import { AdminMiddleware } from './middleware/adminMiddle';
 import { JwtModule } from '@nestjs/jwt';
+import {ChatModule} from './rs/chat/chat.module';
+import {FileModule} from './rs/file/file.module';
+import {ChatGateway} from './rs/socket/chat.gateway';
 
 @Module({
   imports:[
     ConfigModule.forRoot({}),
     JwtModule.register({ global: true, secret: process.env.SJ as string }),
-    AuthModule,ProjectModule,EmployeesModule
+    AuthModule,ProjectModule,EmployeesModule,ChatModule,FileModule
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService,ChatGateway],
 })
 export class AppModule {
   configure(
@@ -31,6 +34,8 @@ export class AppModule {
         { path: '/api/project/task/employee/status',method: RequestMethod.GET },
         { path: '/api/project/employee',method: RequestMethod.POST },
         { path: '/api/project/task/:id',method: RequestMethod.PATCH },
+        { path: 'api/chat/employee', method: RequestMethod.GET },
+        { path: 'api/chat', method: RequestMethod.POST },
       );
     consumer
       .apply(AdminMiddleware)
@@ -51,6 +56,10 @@ export class AppModule {
         { path: 'api/project', method: RequestMethod.GET },
         { path: 'api/project', method: RequestMethod.POST },
         { path: 'api/project/append', method: RequestMethod.POST },
+
+        { path: 'api/chat/admin', method: RequestMethod.GET },
+        { path: 'api/chat/channel', method: RequestMethod.POST },
+        { path: 'api/chat/channel', method: RequestMethod.PATCH },
     );
   }
 }

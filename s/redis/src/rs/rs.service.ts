@@ -20,7 +20,6 @@ export class RsService {
     async redisSet(data: { key: string, value: string }[]) {
       const flattened = data.flatMap(d => [d.key, d.value])
       const result =  await this.redis.mset(...flattened)
-      console.log(result)
       return result
     }
     async redisUpdate(key: string,field:string,value:any) {

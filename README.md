@@ -32,8 +32,9 @@ Before you begin, ensure you have the following installed:
 - ✅ Employee management
 - ✅ Task management
 - ✅ Admin management
-- 🚧 Chat(work in progress)
-- 🚧 File uploading(work in progress)
+- ✅ Chat
+- ✅ Image uploading
+- 🚧 Meeting/Call(in progress)
 
 ## Services Overview
 

@@ -28,8 +28,7 @@ services:
     command: tunnel --config /etc/cloudflared/config.yml run
     volumes:
       - /home/fast/.cloudflared:/etc/cloudflared
-    networks:
-      - api-network
+
 
   api:
     build:
@@ -48,8 +47,8 @@ services:
     command: npm run start:dev
     env_file:
       - .env
-    networks:
-      - api-network
+    depends_on:
+      - nats
   auth:
     restart: always
     mem_limit: 512m
@@ -97,7 +96,21 @@ services:
     command: npm run start:dev
     env_file:
       - .env
-
+  chat:
+    restart: always
+    mem_limit: 512m
+    mem_reservation: 256m
+    depends_on:
+      - db
+    build:
+      context: ./s/chat
+      dockerfile: Dockerfile
+    volumes:
+      - ./s/chat:/app
+      - ./utils:/app/utils
+    command: npm run start:dev
+    env_file:
+      - .env
   file:
     restart: always
     mem_limit: 512m
@@ -139,7 +152,4 @@ services:
 volumes:
   db_data: {}
 
-networks:
-  api-network:
-    driver: bridge
 

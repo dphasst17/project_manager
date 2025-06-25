@@ -12,7 +12,7 @@ const PrivateRoute = ({ children }: { children: React.ReactNode }) => {
     if (typeof isLog === "undefined") return;
 
     if (!isLog) {
-      router.replace("/auth");// dùng replace thay vì push để không lưu lại lịch sử
+      router.replace("/auth");
       setChecking(false)
     }else{
       setChecking(false)

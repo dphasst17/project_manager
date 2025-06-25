@@ -8,6 +8,15 @@ import { DB } from 'src/@types/rs.types';
 @Injectable()
 export class RsService {
     constructor(private readonly rsRepo: RsRepo) { }
+    async getEmployeeInfo(id: number) {
+      try{
+        const data = await this.rsRepo.getEmployeeInfo(id)
+        return data[0]
+      }catch(e){
+        console.log(e)
+        return {message:"Internal Server Error"}
+      }
+    }
     async getEmployees(page: number, limit: number) {
      try{
         const countEmployees = await this.rsRepo.countEmployees()

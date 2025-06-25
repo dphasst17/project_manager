@@ -20,6 +20,7 @@ import { adminCreateProject } from "@/api/project";
 
 const taskKey = ["name","description","deadline"]
 const budgetKey = ["total","spent","category"]
+
 const ProjectDialog = ({closeDialog}:{closeDialog:() => void}) => {
   const {register,handleSubmit} = useForm()
   const [file,setFile] = useState<File | null>(null)

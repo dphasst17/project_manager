@@ -13,9 +13,11 @@ import Team from "@/components/pages/dashboard/team";
 import BtnDialog from "@/components/btn_dialog";
 
 import { analytics } from "@/lib/firebase";
+import {ApiContext} from "@/contexts/api";
 
 export default function Home() {
   const {isAdmin,isLog} = use(AppContext)
+  const {isPending} = use(ApiContext)
   const [isDialog, setIsDialog] = useState<{project?:boolean,employee?:boolean,budget?:boolean,team?:boolean}>({
     project:false,
     employee:false,
@@ -27,7 +29,7 @@ export default function Home() {
       console.log("Firebase Analytics ready");
     }
   }, []);
-  return isLog && <div className="container mx-auto p-8 pt-24">
+  return isLog && !isPending && <div className="container mx-auto p-8 pt-24">
       <div className="mb-10 flex flex-wrap justify-start">
         {isAdmin && <>
           <Statistical />
