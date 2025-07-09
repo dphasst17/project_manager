@@ -11,12 +11,14 @@ import { JwtModule } from '@nestjs/jwt';
 import {ChatModule} from './rs/chat/chat.module';
 import {FileModule} from './rs/file/file.module';
 import {ChatGateway} from './rs/socket/chat.gateway';
+import { NatsClientModule } from 'src/nats-client/nats-client.module';
 
 @Module({
   imports:[
     ConfigModule.forRoot({}),
     JwtModule.register({ global: true, secret: process.env.SJ as string }),
-    AuthModule,ProjectModule,EmployeesModule,ChatModule,FileModule
+    AuthModule,ProjectModule,EmployeesModule,ChatModule,FileModule,
+    NatsClientModule
   ],
   controllers: [AppController],
   providers: [AppService,ChatGateway],

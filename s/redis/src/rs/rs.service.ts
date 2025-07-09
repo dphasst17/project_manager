@@ -12,7 +12,6 @@ export class RsService {
           console.error('Redis connection error:', err)
         })
     }
-
     async redisGet(key: string) {
         const data = await this.redis.get(key)
         return data ? JSON.parse(data) : null
@@ -28,6 +27,7 @@ export class RsService {
       return await this.redis.set(key, JSON.stringify(data))
     }
     async redisDel(key: string) {
-        return await this.redis.del(key)
+        const data = await this.redis.del(key)
+        return data
     }
 }

@@ -1,4 +1,5 @@
 import imageCompression from 'browser-image-compression';
+import CryptoJS from "crypto-js";
 export const ExcelReader = async (file: File) => {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -58,4 +59,43 @@ export const isToday = (dateString: string) => {
     if (isDate && isMonth && isYear) return "Today"
     if (isYear) return `${dateSplit[2]}/${dateSplit[1]}`
     else return date.toISOString().split("T")[0].split("-").reverse().join("/");
+}
+
+export const endCode = (data: string[] | string, key: string) => {
+    const convertData = JSON.stringify(data);
+    const code = CryptoJS.AES.encrypt(
+        convertData,
+        key,
+    ).toString();
+    const base64Encoded = CryptoJS.enc.Base64.stringify(
+        CryptoJS.enc.Utf8.parse(code),
+    );
+    return base64Encoded;
+};
+export const decode = (code: string, key: string) => {
+    const decoded = CryptoJS.enc.Base64.parse(code).toString(CryptoJS.enc.Utf8);
+    const result = CryptoJS.AES.decrypt(decoded, key);
+    const stringData = result.toString(CryptoJS.enc.Utf8);
+    return JSON.parse(stringData);
+};
+
+export const convertDate = (date:string,returnData:'day' | 'time') => {
+  const utcDate = new Date(date);
+  const vnDate = utcDate.toLocaleString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' });
+  const splitData = vnDate.split(' ');
+  const day = splitData[1];
+  const time = splitData[0].split(':').slice(0,2).join(':');
+  return returnData === 'day' ? day : time;
+}
+export const convertDataChat = (data:any/*Chat[]*/) => {
+  const listDate = Array.from(
+        new Set(data.map((d: any/*Chat*/) => d.createdAt.split("T")[0])),
+    )
+    const result = listDate.map((d: any) => {
+        return {
+            date: d,
+            data: data.filter((c: any/*Chat*/) => c.createdAt.split("T")[0] === d),
+        };
+    });
+    return result;
 }

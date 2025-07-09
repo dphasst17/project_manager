@@ -1,10 +1,12 @@
 import { Controller } from '@nestjs/common';
 import { RsService } from './rs.service';
+import { RedisMeetingService } from './public_meeting.service';
 import { EventPattern } from '@nestjs/microservices';
 @Controller()
 export class RsController {
     constructor(
         private readonly redisService: RsService,
+        private readonly meetingService:RedisMeetingService
     ) { }
     @EventPattern('redis')
     async redis() {
@@ -26,5 +28,21 @@ export class RsController {
     @EventPattern('redis_del')
     async redisDel(data: { key:string}) {
         return await this.redisService.redisDel(data.key)
+    }
+    @EventPattern('get_all_meetings')
+    async getAllMeetings() {
+        return await this.meetingService.getAllMeetings()
+    }
+    @EventPattern('get_meeting')
+    async getMeeting(data: { id: string }) {
+        return await this.meetingService.getMeeting(data.id)
+    }
+    @EventPattern('set_meeting')
+    async setMeeting(data: { id: string, title: string, url: string }) {
+        return await this.meetingService.addMeeting(data)
+    }
+    @EventPattern('remove_meeting')
+    async removeMeeting(data: { id: string }) {
+        return await this.meetingService.removeMeeting(data.id)
     }
 }

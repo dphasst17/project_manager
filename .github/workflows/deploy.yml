@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./c
+        working-directory: ./c_react
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -25,16 +25,20 @@ jobs:
       - name: Create Dot ENV
         run: | 
           touch .env
-          echo "NEXT_PUBLIC_URL_SERVER=${{ secrets.URL }}" >> .env
-          echo "NEXT_PUBLIC_IS_ADMIN=${{ secrets.ADMIN }}" >> .env
-          echo "NEXT_PUBLIC_IS_MANAGER=${{ secrets.MANAGER }}" >> .env
-          echo "NEXT_PUBLIC_FIREBASE_API_KEY=${{ secrets.FAK }}" >> .env
-          echo "NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=${{ secrets.FAD }}" >> .env
-          echo "NEXT_PUBLIC_FIREBASE_PROJECT_ID=${{ secrets.FPI }}" >> .env
-          echo "NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=${{ secrets.FSB }}" >> .env
-          echo "NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=${{ secrets.FMSI }}" >> .env
-          echo "NEXT_PUBLIC_FIREBASE_APP_ID=${{ secrets.FAI }}" >> .env
-          echo "NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID=${{ secrets.FMI }}" >> .env
+          echo "VITE_URL_SERVER=${{ secrets.URL }}" >> .env
+          echo "VITE_IS_ADMIN=${{ secrets.ADMIN }}" >> .env
+          echo "VITE_IS_MANAGER=${{ secrets.MANAGER }}" >> .env
+          echo "VITE_FIREBASE_API_KEY=${{ secrets.FAK }}" >> .env
+          echo "VITE_FIREBASE_AUTH_DOMAIN=${{ secrets.FAD }}" >> .env
+          echo "VITE_FIREBASE_PROJECT_ID=${{ secrets.FPI }}" >> .env
+          echo "VITE_FIREBASE_STORAGE_BUCKET=${{ secrets.FSB }}" >> .env
+          echo "VITE_FIREBASE_MESSAGING_SENDER_ID=${{ secrets.FMSI }}" >> .env
+          echo "VITE_FIREBASE_APP_ID=${{ secrets.FAI }}" >> .env
+          echo "VITE_FIREBASE_MEASUREMENT_ID=${{ secrets.FMI }}" >> .env
+          echo "VITE_ZEGO_APP_ID=${{ secrets.ZEGOID }}" >> .env
+          echo "VITE_ZEGO_SERVER_SECRET=${{ secrets.ZEGOSS }}" >> .env
+          echo "VITE_SK=${{ secrets.SK }}" >> .env
+          echo "VITE_K=${{ secrets.K }}" >> .env
           cat .env
 
       - name: Set up Google Credentials
@@ -43,8 +47,8 @@ jobs:
       - name: Verify Google Credentials
         run: cat /tmp/google-credentials.json || echo "Missing credentials!"
 
-      - name: Enable Firebase Web Frameworks Experiment
-        run: firebase experiments:enable webframeworks
+      - name: Build Application
+        run: npm run build
 
       - name: Deploy to Firebase
         env:

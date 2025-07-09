@@ -61,17 +61,19 @@ const ChatDetail = ({id,info}:{id:string,info:any}) => {
         total:chat.data.total,
         remaining:chat.data.total - chat.data.data.length
       })
-      scrollToBottom()
+      setTimeout(() => {
+        scrollToBottom();
+      }, 50); 
+
     }
     fetchDataChat()
     setMemberData(info.members.map((d:any) => ({id:d.id,name:`${d.first_name} ${d.last_name}`})))
   },[id,info])
-  //scroll to bottom
   useEffect(() => {
     if(socketRef.current){
       socketRef.current.emit('join_channel',{channel:id})
       socketRef.current.on('join_channel',(data:any) => {
-        console.log(data) 
+        console.log(data.message) 
       })
       socketRef.current.on('message',(dataChat:any) => {
         if(employee?.employee_id === dataChat.senderId) return
