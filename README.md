@@ -34,7 +34,7 @@ Before you begin, ensure you have the following installed:
 - ✅ Admin management
 - ✅ Chat
 - ✅ Image uploading
-- 🚧 Meeting/Call(in progress)
+- ✅ Meeting/Call
 
 ## Services Overview
 

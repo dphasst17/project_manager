@@ -18,7 +18,8 @@ export class RsController {
     }
     @EventPattern('getRoleByEmployee')
     async getRoleByEmployee(data:{id:number}) {
-        return this.rsService.getRoleByEmployee(data.id)
+        const result = await this.rsService.getRoleByEmployee(data.id)
+        return result
     }
     @EventPattern('getEmployeesById')
     async getEmployeesById(id:number) {
