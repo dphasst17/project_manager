@@ -79,7 +79,7 @@ const ChatRightPanel = ({info,dataImages,setDataImages}:
           <AlertDialog key={item._id!} open={url === item.url} onOpenChange={(isOpen) => setUrl(isOpen ? item.url : "")}>
             <AlertDialogTrigger asChild>
               <img src={item.url} alt="img"
-              className="w-35 h-35 object-cover rounded-md m-1" />
+              className="w-34 h-34 object-cover rounded-md m-1" />
             </AlertDialogTrigger>
               <ImagesDialog url={item.url} setUrl={setUrl} />
           </AlertDialog>

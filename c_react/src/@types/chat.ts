@@ -3,6 +3,7 @@ export interface Channel {
   name: string;
   members: any[];
   isArchived: boolean;
+  unread?:number
   createdAt?: string;
   updatedAt?: string;
 }

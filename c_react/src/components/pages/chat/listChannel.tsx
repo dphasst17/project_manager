@@ -45,7 +45,7 @@ const ListChannel = ({setId,setInfo}:{
     setInfo(item)
   }
 
-  return <div className="col-span-1 h-full max-h-[93vh] pr-4 grid grid-cols-1 grid-rows-12 gap-2 content-start">
+  return <div className="col-span-1 h-[98%] pr-4 grid grid-cols-1 grid-rows-12 gap-2 content-start">
     {isAdmin && <div className="btn_channel row-span-1 grid grid-cols-2 gap-2 content-start">
       <BtnDialog title="+ Channel" btnClass="h-8 flex justify-center items-center bg-blue-500 p-2 rounded-md text-white cursor-pointer"
       isOpen={isDialog.channel as boolean} openChange={(isOpen) => setIsDialog({...isDialog,channel:isOpen})}
@@ -57,8 +57,9 @@ const ListChannel = ({setId,setInfo}:{
     <div className={`listChannel ${isAdmin ? "row-span-7" :"row-span-8"} bg-zinc-900 rounded-md flex flex-col overflow-y-auto p-2`}>
       {channel.map((item:Channel) => {
         return <div key={item._id} className="channel w-full h-10 flex items-center justify-between">
-          <div onClick={() => handleSelectChannel(item)} className="w-full hover:bg-zinc-800 transition-all p-1 rounded-md cursor-pointer mx-1">
-            # {item.name}
+          <div onClick={() => handleSelectChannel(item)} className="w-full flex justify-between hover:bg-zinc-800 transition-all p-1 rounded-md cursor-pointer mx-1">
+            <span># {item.name}</span>
+            {item.unread !== 0 && <span className="w-5 h-5 flex justify-center items-center p-1 !text-[12px] text-white rounded-sm bg-red-500">{item.unread}</span>}
           </div>
         </div>
       })}
